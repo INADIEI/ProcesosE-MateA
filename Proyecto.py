@@ -1,6 +1,33 @@
 import pandas as pd
 import numpy as np
 
+
+def limpiar_datos(df, nombre):
+    
+    print(f"\nLimpieza de la base de datos: {nombre}")
+    
+    # Dimensiones iniciales
+    print(f"Dimensiones iniciales: {df.shape}")
+    
+    # Eliminar duplicados
+    df = df.drop_duplicates()
+    
+    # Verificar valores faltantes
+    print("Valores faltantes por columna antes de limpieza:")
+    print(df.isnull().sum())
+    
+    # Eliminar filas con valores faltantes
+    df = df.dropna()
+    
+    # Dimensiones después de limpieza
+    print(f"Dimensiones después de eliminar duplicados y valores faltantes: {df.shape}")
+    
+    print("Nombres de columnas después de normalización:")
+    print(df.columns)
+    
+    return df
+
+
 def haversine(lat1, lon1, lat2, lon2):
     """
     Calcula la distancia entre dos puntos geográficos en kilómetros.
@@ -65,22 +92,20 @@ uber = pd.read_csv('My Uber Drives - 2016.csv')
 amazon = pd.read_csv('amazon_delivery.csv')
 dataset = pd.read_csv('dataset.csv')  ## No tiene Distancias, solo tiempo entre recogida y entrega
 
+# Limpiar cada base de datos
+uber_limpio = limpiar_datos(uber, "Uber")
+amazon_limpio = limpiar_datos(amazon, "Amazon")
+dataset_limpio = limpiar_datos(dataset, "Dataset")
 
-almacenlongitud = amazon['Store_Longitude']
-almacenlatitud =  amazon ['Store_Latitude']
-destinolongitud = amazon ['Drop_Longitude']
-destinolatitud = amazon ['Drop_Latitude']
 
 # Calcular la distancia para cada fila del DataFrame
-amazon['Distancia_km'] = haversine(
-    amazon['Store_Latitude'], amazon['Store_Longitude'],
-    amazon['Drop_Latitude'], amazon['Drop_Longitude']
+amazon_limpio['Distancia_km'] = haversine(
+    amazon_limpio['Store_Latitude'], amazon_limpio['Store_Longitude'],
+    amazon_limpio['Drop_Latitude'], amazon_limpio['Drop_Longitude']
 )
 
 # Verificar los resultados
-print(amazon[['Store_Latitude', 'Store_Longitude', 'Drop_Latitude', 'Drop_Longitude', 'Distancia_km']])
+print(amazon_limpio[['Store_Latitude', 'Store_Longitude', 'Drop_Latitude', 'Drop_Longitude', 'Distancia_km']])
 
-disUber = uber['MILES*'] ## esto es en millas
-
-
+disUber = uber_limpio['MILES*'] ## esto es en millas
 print(disUber)
