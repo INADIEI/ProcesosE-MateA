@@ -133,7 +133,7 @@ markov_simulation = Markov(transition_matrix, states, 10)
 print("Simulación de cadenas de Markov:", markov_simulation)
 
 # Optimización logística
-costo_optimizado = optimizacion(amazon_limpio, 'Distancia_km', 'Delivery_Time', 5, 2)
+costo_optimizado = optimizacion(amazon_limpio, 'Distancia_km', 'Delivery_Time', 5, 2) ## El 5 y 2 son ejemplos de costo de distancia y tiempo, no de la base de datos
 print(f"Costo logístico optimizado: {costo_optimizado}")
 
 # Verificar los resultados
