@@ -80,7 +80,26 @@ def dicotomico (a, b, e = 0.01):
         print(res, x1, x2)
         i+=1
     return resFinal
+
+# Implementación de cadenas de Markov
+def Markov(matriz, states, steps):
+
+    c = np.random.choice(states)
+    v = [c]
+
+    for _ in range(steps):
+        c = np.random.choice(states, p=matriz[states.index(c)])
+        v.append(c)
+
+    return v
+
+# Optimización logística con distancia y tiempo
+def optimizacion(df, distancia_col, tiempo_col, costo_distancia, costo_tiempo):
     
+    df['Costo_total'] = df[distancia_col] * costo_distancia + df[tiempo_col] * costo_tiempo
+    costo_total = df['Costo_total'].sum()
+    return costo_total
+
             
 
 resultadoD = dicotomico(0,10)
@@ -103,6 +122,19 @@ amazon_limpio['Distancia_km'] = haversine(
     amazon_limpio['Store_Latitude'], amazon_limpio['Store_Longitude'],
     amazon_limpio['Drop_Latitude'], amazon_limpio['Drop_Longitude']
 )
+
+# Cadenas de Markov ejemplo
+transition_matrix = [
+    [0.7, 0.3],  # Probabilidades desde el estado 0
+    [0.4, 0.6]   # Probabilidades desde el estado 1
+]
+states = ['Estado 0', 'Estado 1']
+markov_simulation = Markov(transition_matrix, states, 10)
+print("Simulación de cadenas de Markov:", markov_simulation)
+
+# Optimización logística
+costo_optimizado = optimizacion(amazon_limpio, 'Distancia_km', 'Delivery_Time', 5, 2)
+print(f"Costo logístico optimizado: {costo_optimizado}")
 
 # Verificar los resultados
 print(amazon_limpio[['Store_Latitude', 'Store_Longitude', 'Drop_Latitude', 'Drop_Longitude', 'Distancia_km']])
