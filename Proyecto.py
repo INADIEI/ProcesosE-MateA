@@ -88,9 +88,9 @@ resultadoD = dicotomico(0,10)
 print(resultadoD)
 
 
-uber = pd.read_csv('My Uber Drives - 2016.csv')
-amazon = pd.read_csv('amazon_delivery.csv')
-dataset = pd.read_csv('dataset.csv')  ## No tiene Distancias, solo tiempo entre recogida y entrega
+uber = pd.read_csv('DataSets/My Uber Drives - 2016.csv')
+amazon = pd.read_csv('DataSets/amazon_delivery.csv')
+dataset = pd.read_csv('DataSets/dataset.csv')  ## No tiene Distancias, solo tiempo entre recogida y entrega
 
 # Limpiar cada base de datos
 uber_limpio = limpiar_datos(uber, "Uber")
