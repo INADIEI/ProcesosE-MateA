@@ -152,9 +152,11 @@ class MetodoDicotomico:
         self.tolerancia = tolerancia
 
     def f(self, x):
-        v1 = np.sum((self.tiempo * x)**2)
-        v2 = np.sum((self.distancia * x)**2)
-        d = (v2/v1)**(1/2)
+        v1 = np.sum(self.tiempo)**(1/2)
+        v2 = np.sum(self.distancia)**(1/4)
+        i = v2/v1
+        c = (np.abs(v1-v2))**(1/8)
+        d = i*x**2 - c*x
         return d
     
     def aplicarMetodo(self):
