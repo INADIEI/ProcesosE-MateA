@@ -83,6 +83,8 @@ class ProcesadorDatos:
             print("Iteración:", i, "Resultado:", res, "x1:", x1, "x2:", x2)
             i += 1
         return resFinal
+    
+    def simplex ():
 
     def Markov(matriz, states, steps):
         # Implementación de cadenas de Markov
@@ -182,3 +184,51 @@ class MetodoDicotomico:
         self.intervalo = (a, b)
 
         return self.intervalo
+    
+
+    import numpy as np
+
+class MetodoSimplex:
+    def __init__(self, c, A, b):
+        self.c = c
+        self.A = A
+        self.b = b
+        self.solution = None
+        self.optimal_value = None
+
+    def _pivot(self, tableau, row, col):
+        tableau[row, :] /= tableau[row, col]
+        for i in range(tableau.shape[0]):
+            if i != row:
+                tableau[i, :] -= tableau[i, col] * tableau[row, :]
+
+    def aplicarMetodo(self):
+        # Dimensiones de A
+        m, n = self.A.shape
+
+        # Construcción de la tabla inicial del simplex
+        tableau = np.hstack([self.A, np.eye(m), self.b.reshape(-1, 1)])
+        c_extended = np.hstack([self.c, np.zeros(m + 1)])
+        tableau = np.vstack([tableau, c_extended])
+
+        # Iterar hasta que no haya coeficientes negativos en la fila de costos
+        while any(tableau[-1, :-1] < 0):
+            # Selección de la columna pivote (regla de Bland)
+            col = np.where(tableau[-1, :-1] < 0)[0][0]
+
+            # Selección de la fila pivote
+            row = np.argmin(tableau[:-1, -1] / tableau[:-1, col])
+
+            # Realizamos la operación de pivoteo
+            self._pivot(tableau, row, col)
+
+        # La solución óptima
+        solution = np.zeros(n)
+        for i in range(n):
+            if np.all(tableau[:-1, i] == 1) and tableau[-1, i] == 0:
+                solution[i] = tableau[np.where(tableau[:-1, i] == 1)[0][0], -1]
+
+        self.solution = solution
+        self.optimal_value = -tableau[-1, -1]
+        return self.solution, self.optimal_value
+
