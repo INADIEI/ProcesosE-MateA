@@ -83,8 +83,6 @@ class ProcesadorDatos:
             print("Iteración:", i, "Resultado:", res, "x1:", x1, "x2:", x2)
             i += 1
         return resFinal
-    
-    def simplex ():
 
     def Markov(matriz, states, steps):
         # Implementación de cadenas de Markov
@@ -230,5 +228,6 @@ class MetodoSimplex:
 
         self.solution = solution
         self.optimal_value = -tableau[-1, -1]
+        
         return self.solution, self.optimal_value
 
