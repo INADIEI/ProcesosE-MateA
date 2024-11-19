@@ -142,3 +142,41 @@ def optimizacion(df, distancia_col, tiempo_col, costo_distancia, costo_tiempo):
 
     #disUber = uber_limpio['MILES*'] ## esto es en millas
     #print(disUber)
+
+
+class MetodoDicotomico:
+    def __init__(self, df, epsilon = 0.01, tolerancia = 0.01):
+        self.tiempo = df['Tiempo']
+        self.distancia = df['Distancia']
+        self.epsilon = epsilon
+        self.tolerancia = tolerancia
+
+    def f(self, x):
+        v1 = np.sum((self.tiempo * x)**2)
+        v2 = np.sum((self.distancia * x)**2)
+        d = (v2/v1)**(1/2)
+        return d
+    
+    def aplicarMetodo(self):
+        self.tiempo = pd.to_timedelta(self.tiempo).dt.total_seconds()
+        a = min(self.tiempo)
+        b = max(self.tiempo)
+        
+        # Método dicotómico para encontrar el mínimo tiempo
+        while (b - a) > self.tolerancia:
+            x1 = (a + b) / 2 - self.epsilon
+            x2 = (a + b) / 2 + self.epsilon
+
+            ev_x1 = self.f(x1)
+            ev_x2 = self.f(x2)
+
+            if ev_x1 < ev_x2:
+                b = x2
+            else:
+                a = x1
+
+        a = pd.to_timedelta(a, unit='s')
+        b = pd.to_timedelta(b, unit='s')
+        self.intervalo = (a, b)
+
+        return self.intervalo
